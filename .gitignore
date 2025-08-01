@@ -1,0 +1,4 @@
+*/.env
+backend/prompt_engine/local.env
+backend/prompt_engine/llm_clients/__pycache__
+backend/prompt_engine/__pycache__

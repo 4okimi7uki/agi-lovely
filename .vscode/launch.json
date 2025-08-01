@@ -1,0 +1,15 @@
+// .vscode/launch.json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run builder",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/prompt_engine/builder.py",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            }
+        }
+    ]
+}

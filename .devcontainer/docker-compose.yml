@@ -1,0 +1,42 @@
+services:
+    main:
+        image: mcr.microsoft.com/vscode/devcontainers/base:bookworm
+        init: true
+        tty: true
+        cap_add:
+            - IPC_LOCK
+        volumes:
+            - ..:/workspace:rw
+        depends_on:
+            - rdb
+        ports:
+            - "4000:3000" # Next.js
+            - "8000:8000" # FastAPI
+        environment:
+            DATABASE_URL: postgres://...
+        networks:
+            - myNetwork
+
+    rdb:
+        image: postgres:16
+        restart: unless-stopped
+        init: true
+        tty: true
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+        environment:
+            POSTGRES_USER: user
+            POSTGRES_PASSWORD: pass
+            POSTGRES_DB: lovely
+        ports:
+            - "5432:5432"
+        networks:
+            - myNetwork
+
+volumes:
+    pgdata:
+
+networks:
+    myNetwork:
+        driver: bridge
+        enable_ipv6: false

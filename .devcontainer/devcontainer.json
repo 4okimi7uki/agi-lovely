@@ -1,0 +1,63 @@
+{
+    "name": "${localWorkspaceFolderBasename}",
+    "dockerComposeFile": "docker-compose.yml",
+    "forwardPorts": [4000, 8000],
+    "service": "main",
+    "workspaceFolder": "/workspace",
+    "mounts": [
+        // SSH config
+        {
+            "source": "${env:HOME}/.ssh",
+            "target": "/home/vscode/.ssh",
+            "type": "bind"
+        },
+        {
+            "source": "..",
+            "target": "/workspace",
+            "type": "bind"
+        }
+    ],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "esbenp.prettier-vscode",
+                "GitHub.copilot",
+                "GitHub.copilot-chat",
+                "GitHub.vscode-pull-request-github",
+                "rssowl.copy-relative-path-posix",
+                "github.vscode-github-actions",
+                "wayou.vscode-todo-highlight"
+            ],
+            "settings": {
+                "editor.formatOnPaste": true,
+                "editor.formatOnSave": true,
+                "terminal.integrated.scrollback": 10000,
+                "files.associations": {
+                    "*.hcl": "terraform"
+                }
+            }
+        }
+    },
+    // Sync the local user's UID/GID with the container's user UID/GID.
+    "remoteUser": "vscode",
+    "containerEnv": {
+        "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
+        "ghcr.io/devcontainers/features/node:1": { "version": "22.11.0" },
+        "ghcr.io/devcontainers/features/python:1": { "version": "3.11" }
+    },
+    "postCreateCommand": "bash .devcontainer/scripts/install-dependencies.sh",
+    "portsAttributes": {
+        "4000": {
+            "label": "Next.js"
+        },
+        "8000": {
+            "label": "fastAPI"
+        },
+        "5243": {
+            "label": "Postgre"
+        }
+    }
+}
