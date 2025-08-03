@@ -20,7 +20,9 @@ jobs:
                   node-version: 20
 
             - name: 📦 Install dependencies
+              working-directory: ./chat-app
               run: npm ci
 
             - name: 🧹 Run ESLint
+              working-directory: ./chat-app
               run: npm run lint
