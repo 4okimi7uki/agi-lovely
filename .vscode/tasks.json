@@ -1,0 +1,26 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        // {
+        //     "label": "Run All Apps",
+        //     "type": "shell",
+        //     "options": {
+        //         "cwd": "${workspaceFolder}"
+        //     },
+        //     "command": "echo running...",
+        //     "dependsOn": ["[WEB] RUN APP - Flask", "[BACKEND] RUN - Kotlin"],
+        //     "problemMatcher": []
+        // },
+        {
+            "label": "[WEB] RUN APP",
+            "type": "shell",
+            "command": "npm run dev",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/chat-app"
+            },
+            "dependsOn": [],
+            "isBackground": false
+        }
+    ]
+}

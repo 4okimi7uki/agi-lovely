@@ -10,7 +10,7 @@ services:
         depends_on:
             - rdb
         ports:
-            - "4000:3000" # Next.js
+            - "4000:4000" # Next.js
             - "8000:8000" # FastAPI
         environment:
             DATABASE_URL: postgres://...
