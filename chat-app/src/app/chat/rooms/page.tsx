@@ -12,7 +12,7 @@ interface RoomType {
     name: string;
 }
 
-function roomList() {
+function RoomList() {
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [rooms, setRooms] = useState<RoomType[]>([]);
     const { user } = useAuth();
@@ -78,4 +78,4 @@ function roomList() {
     );
 }
 
-export default roomList;
+export default RoomList;
