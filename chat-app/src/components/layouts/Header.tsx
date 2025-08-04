@@ -7,6 +7,8 @@ import { Menu, MenuItem } from "@mui/material";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase/firebase";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { ChevronLeft } from "@geist-ui/icons";
 
 function Header() {
     const { user, isLoading } = useAuth();
@@ -22,18 +24,16 @@ function Header() {
     return (
         <div className="flex h-full items-center justify-between bg-gray-100 px-5 text-[#333] shadow-[var(--shadow)]">
             <div>
-                {/* <button
-                    onClick={async () => {
-                        const res = await handleGoogleLogin();
-                        console.log({ res });
-                    }}
-                >
-                    Google
-                </button> */}
+                <Link href="/chat/rooms">
+                    <ChevronLeft />
+                </Link>
+            </div>
+            <div>
+                {}
             </div>
             {!isLoading && (
                 <div
-                    className="ml-auto flex items-center gap-1"
+                    className="ml-auto flex cursor-pointer items-center gap-1"
                     onClick={(e: React.MouseEvent<HTMLElement>) => {
                         setIsOpenContext(true);
                         setAnchorEl(e.currentTarget);

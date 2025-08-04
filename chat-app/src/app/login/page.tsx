@@ -11,7 +11,7 @@ function LoginPage() {
 
     useEffect(() => {
         if (!isLoading && user) {
-            router.push("/chat");
+            router.push("/chat/rooms");
         }
     }, [user, isLoading, router]);
 

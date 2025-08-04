@@ -1,86 +1,77 @@
 "use client";
 
+import { useAuth } from "@/lib/firebase/AuthContext";
+import { getMessages } from "@/lib/firebase/firestore";
+import { fromFirestoreTimestamp } from "@/lib/utils/convert";
 import clsx from "clsx";
 import dayjs from "dayjs";
-import React from "react";
+import { useParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { twMerge } from "tailwind-merge";
+import { ChatType } from "./ChatPage";
 
-interface ChatType {
-    id: number;
-    message: string;
-    displayName: string;
-    userId: string | number;
-    isRead: boolean;
-    timeStamp: string;
+interface TimeLineProps {
+    chats: ChatType[];
+    bottomRef: React.RefObject<HTMLDivElement | null>;
 }
 
-const sampleChat: ChatType[] = [
-    {
-        id: 1,
-        message: "Hello world",
-        displayName: "Mizuki Aoki",
-        userId: 1,
-        isRead: true,
-        timeStamp: dayjs().toString(),
-    },
-    {
-        id: 2,
-        message: "やっほー",
-        displayName: "User1",
-        userId: 2,
-        isRead: false,
-        timeStamp: dayjs().toString(),
-    },
-    {
-        id: 3,
-        message: "やっほー!",
-        displayName: "User1",
-        userId: 2,
-        isRead: false,
-        timeStamp: dayjs().toString(),
-    },
-    {
-        id: 4,
-        message: "ウエイ",
-        displayName: "User1",
-        userId: 2,
-        isRead: false,
-        timeStamp: dayjs().toString(),
-    },
-];
+function TimeLine({ chats, bottomRef }: TimeLineProps) {
+    // const [chats, setChats] = useState<ChatType[]>([]);
+    // const params = useParams();
+    // const roomId = params.roomId as string;
 
-function TimeLine() {
+    const { user, isLoading } = useAuth();
+
+    // useEffect(() => {
+    //     if (!user) return;
+    //     const fetchChats = async () => {
+    //         const messages = await getMessages(roomId);
+    //         console.log({ messages });
+    //         setChats(Object.values(messages).flat());
+    //     };
+    //     fetchChats();
+    // }, [user]);
+
+    // console.log({ chats });
+
     return (
         <div className="flex h-full flex-col gap-2 overflow-auto border border-[#eee] bg-gray-50 p-4 text-[#333]">
-            {sampleChat.map((item, i) => {
+            {chats.map((chat, i) => {
                 return (
                     <div
-                        key={"talk-id-" + item.id}
-                        className={clsx("w-fit", item.userId === 1 ? "ml-auto" : "")}
+                        key={"talk-id-" + chat.id}
+                        className={clsx("w-fit", chat.senderId === user?.uid ? "ml-auto" : "")}
                     >
                         <div
                             className={clsx(
                                 "flex gap-2",
-                                item.userId === 1 ? "flex-row-reverse" : ""
+                                chat.senderId === user?.uid ? "flex-row-reverse" : ""
                             )}
                         >
                             <div className="flex flex-col gap-1">
-                                <div className={clsx("px-1 text-[12px]")}>{item.displayName}</div>
-                                <div className="flex flex-col rounded-[10px] bg-gray-50 p-3 shadow-[var(--shadow)]">
-                                    <div>{item.message}</div>
+                                <div className={clsx("px-1 text-[12px]")}>{chat.displayName}</div>
+                                <div
+                                    className={twMerge(
+                                        "flex flex-col rounded-[10px] bg-gray-50 p-3 shadow-[var(--shadow)]",
+                                        chat.senderId === user?.uid ? "bg-[#e8f2ee]" : ""
+                                    )}
+                                >
+                                    <div>{chat.message}</div>
                                 </div>
                             </div>
                             <div className={clsx("flex flex-col justify-end")}>
                                 <div className="text-[12px]">
-                                    {item.userId === 1 && item.isRead === true ? "read" : ""}
+                                    {chat.senderId === user?.uid && chat.isRead ? "read" : ""}
                                 </div>
                                 <div className="flex items-end text-[11px]">
-                                    {dayjs(item.timeStamp).format("HH:mm")}
+                                    {dayjs(chat.createdAt).format("HH:mm")}
                                 </div>
                             </div>
                         </div>
                     </div>
                 );
             })}
+            <div data-info="bottom" ref={bottomRef}></div>
         </div>
     );
 }
