@@ -1,21 +1,13 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import TimeLine from "./Timeline";
+import TimeLine from "./TimeLine";
 import InputBox from "./InputBox";
 import { useParams } from "next/navigation";
 import { addDoc, collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { useAuth } from "@/lib/firebase/AuthContext";
 import { db } from "@/lib/firebase/firebase";
 import { getMessages, markAsRead, subscribeMessages } from "@/lib/firebase/firestore";
-
-export interface ChatType {
-    id?: string;
-    message?: string;
-    displayName?: string;
-    senderId?: string | number;
-    isRead?: boolean;
-    createdAt?: Date | null;
-}
+import { ChatType } from "@/app/types/chat";
 
 function ChatPage() {
     const [inputMessage, setInputMessage] = useState<string>("");
