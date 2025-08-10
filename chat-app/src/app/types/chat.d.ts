@@ -12,3 +12,10 @@ export interface ChatType {
     isRead?: boolean;
     createdAt?: Date | null;
 }
+
+export interface UserType {
+    displayName: string;
+    email: string;
+    photoURL: string;
+    uid: string;
+}
