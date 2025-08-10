@@ -8,11 +8,13 @@ import {
     onSnapshot,
     doc,
     updateDoc,
+    getDoc,
 } from "firebase/firestore";
 import { auth, db } from "./firebase";
 import { fromFirestoreTimestamp } from "../utils/convert";
-import { ChatType } from "@/app/chat/rooms/[roomId]/layout";
-import { bnBD } from "@mui/material/locale";
+import { ChatType, RoomType, UserType } from "@/app/types/chat";
+import { callbackify } from "util";
+import { Unsubscribe, User } from "firebase/auth";
 
 // export const addMessage = async (text: string, userId: string) => {
 //     const docRef = await addDoc(collection(db, "chat"), {
@@ -31,11 +33,21 @@ export const fetchUserDisplayName = async (uid: string) => {
     return userSnap;
 };
 
-export interface RoomType {
-    id: string;
-    members: string[];
-    name: string;
-}
+export const fetchUsers = async () => {
+    const q = query(collection(db, "users"));
+    const userSnap = await getDocs(q);
+    return userSnap.docs.map((user) => {
+        const data = user.data();
+        return [
+            {
+                displayName: data.displayName,
+                email: data.email,
+                photoURL: data.photoURL,
+                uid: data.uid,
+            },
+        ];
+    });
+};
 
 export const fetchMyChatRooms = async (uid: string) => {
     const roomsRef = collection(db, "rooms");
@@ -52,6 +64,33 @@ export const fetchMyChatRooms = async (uid: string) => {
             },
         ];
     });
+};
+// fetchTheRoom;
+export const unsubscribeRoom = (
+    roomId: string,
+    callback: (room: RoomType | null) => void
+): Unsubscribe => {
+    const ref = doc(db, "rooms", roomId);
+    return onSnapshot(ref, (snapshot) => {
+        if (!snapshot.exists()) return callback(null);
+        const data = snapshot.data();
+        callback({
+            id: snapshot.id,
+            name: data?.name as string,
+            members: data?.members as string[],
+        });
+    });
+};
+
+export const createTalkRoom = async (membersId: string[], name: string) => {
+    try {
+        await addDoc(collection(db, "rooms"), {
+            members: membersId,
+            name: name,
+        });
+    } catch (err) {
+        console.error(err);
+    }
 };
 
 export const getMessages = async (roomId: string): Promise<ChatType[]> => {

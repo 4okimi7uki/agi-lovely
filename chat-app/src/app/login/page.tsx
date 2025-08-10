@@ -1,6 +1,7 @@
 "use client";
 import { useAuth } from "@/lib/firebase/AuthContext";
 import { handleGoogleLogin } from "@/lib/firebase/authGoogleSignin";
+import { Button } from "@mui/material";
 import { useRouter } from "next/navigation";
 
 import React, { useEffect } from "react";
@@ -20,16 +21,16 @@ function LoginPage() {
     }
 
     return (
-        <div className="h-[100svh] content-center bg-[#eee] text-center">
+        <div className="h-[100svh] content-center bg-[#77aab5] text-center">
             <h1>Login</h1>
-            <button
-                className="cursor-pointer bg-amber-200"
+            <Button
+                className="cursor-pointer"
                 onClick={async () => {
                     await handleGoogleLogin();
                 }}
             >
                 sign up
-            </button>
+            </Button>
         </div>
     );
 }
