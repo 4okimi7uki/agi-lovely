@@ -1,14 +1,12 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
 import { useAuth } from "@/lib/firebase/AuthContext";
-import { getMessages } from "@/lib/firebase/firestore";
-import { fromFirestoreTimestamp } from "@/lib/utils/convert";
 import clsx from "clsx";
 import dayjs from "dayjs";
 import { useParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
-import { ChatType } from "./ChatPage";
+import { ChatType } from "@/app/types/chat";
 
 interface TimeLineProps {
     chats: ChatType[];
@@ -16,23 +14,7 @@ interface TimeLineProps {
 }
 
 function TimeLine({ chats, bottomRef }: TimeLineProps) {
-    // const [chats, setChats] = useState<ChatType[]>([]);
-    // const params = useParams();
-    // const roomId = params.roomId as string;
-
     const { user, isLoading } = useAuth();
-
-    // useEffect(() => {
-    //     if (!user) return;
-    //     const fetchChats = async () => {
-    //         const messages = await getMessages(roomId);
-    //         console.log({ messages });
-    //         setChats(Object.values(messages).flat());
-    //     };
-    //     fetchChats();
-    // }, [user]);
-
-    // console.log({ chats });
 
     return (
         <div className="flex h-full flex-col gap-2 overflow-auto border border-[#eee] bg-gray-50 p-4 text-[#333]">
